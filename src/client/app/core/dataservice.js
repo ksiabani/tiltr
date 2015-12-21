@@ -10,7 +10,8 @@
     function dataservice($http, $q, exception, logger) {
         var service = {
             getPeople: getPeople,
-            getMessageCount: getMessageCount
+            getMessageCount: getMessageCount,
+            getListings: getListings
         };
 
         return service;
@@ -29,6 +30,25 @@
             function fail(e) {
                 return exception.catcher('XHR Failed for getPeople')(e);
             }
+        }
+
+        function getListings () {
+            //var mainInfo = null;
+            return $http.get('/src/client/listings.geojson')
+                .then(success)
+                .catch(fail);
+
+                function success (response) {
+                    return response.data;
+                }
+
+                function fail (e) {
+                    return exception.catcher('Something went wrong while retrieving listings')(e);
+                }
+                //
+                //.success(function(data) {
+                //mainInfo = data;
+            //});
         }
     }
 })();

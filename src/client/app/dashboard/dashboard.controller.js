@@ -21,7 +21,7 @@
         loadMap();
 
         function activate () {
-            var promises = [getMessageCount(), getPeople()];
+            var promises = [getPeople(), getListings()];
             return $q.all(promises).then(function () {
                 logger.info('Activated Dashboard View');
             });
@@ -39,6 +39,14 @@
                 vm.people = data;
                 return vm.people;
             });
+        }
+
+        function getListings () {
+            return dataservice.getListings().then(function (data) {
+                vm.messageCount = data.features.length;
+                console.log(data);
+                return vm.messageCount;
+            })
         }
 
         function loadMap () {
