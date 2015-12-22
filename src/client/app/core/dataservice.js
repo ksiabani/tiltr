@@ -5,9 +5,9 @@
         .module('app.core')
         .factory('dataservice', dataservice);
 
-    dataservice.$inject = ['$http', '$q', 'exception', 'logger'];
+    dataservice.$inject = ['$http', '$q', 'exception', 'logger', 'Loki'];
     /* @ngInject */
-    function dataservice($http, $q, exception, logger) {
+    function dataservice($http, $q, exception, logger, Loki) {
         var service = {
             getPeople: getPeople,
             getMessageCount: getMessageCount,
@@ -33,22 +33,22 @@
         }
 
         function getListings () {
-            //var mainInfo = null;
             return $http.get('/src/client/listings.geojson')
                 .then(success)
                 .catch(fail);
 
                 function success (response) {
-                    return response.data;
+                    var db = new loki();
+                    //var features = new Loki.Collection('features', { indices: ['properties.id']});
+                    var listings = db.addCollection('listings');
+                    listings.insert(response.data.features);
+                    return listings;
                 }
 
                 function fail (e) {
                     return exception.catcher('Something went wrong while retrieving listings')(e);
                 }
-                //
-                //.success(function(data) {
-                //mainInfo = data;
-            //});
         }
+
     }
 })();
