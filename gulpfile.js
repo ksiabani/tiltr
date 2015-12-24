@@ -7,6 +7,7 @@ var gulp = require('gulp');
 var path = require('path');
 var _ = require('lodash');
 var $ = require('gulp-load-plugins')({lazy: true});
+var ghPages = require('gulp-gh-pages');
 
 var colors = $.util.colors;
 var envenv = $.util.env;
@@ -371,6 +372,14 @@ gulp.task('bump', function() {
  * Optimize the code and re-load browserSync
  */
 gulp.task('browserSyncReload', ['optimize'], browserSync.reload);
+
+/**
+ * Deploy to GitHUb
+ */
+gulp.task('deploy', function() {
+    return gulp.src('./dist/**/*')
+        .pipe(ghPages());
+});
 
 ////////////////
 
