@@ -7,7 +7,7 @@
                         <li class="blightblue">
                             <div class="pull-left"><i class="fa fa-plane"></i></div>
                             <div class="datas-text pull-right">
-                                <span class="bold">{{vm.neighbourhoodCount}}</span> Neighbourhoods
+                                <span class="bold"></span> Neighbourhoods
                             </div>
                             <div class="clearfix"></div>
                         </li>
@@ -15,7 +15,7 @@
                         <li class="borange">
                             <div class="pull-left"><i class="fa fa-envelope"></i></div>
                             <div class="datas-text pull-right">
-                                <span class="bold">{{vm.messageCount}}</span> Listings
+                                <span class="bold">{{vm.pgTotalItems}}</span> Listings
                             </div>
                             <div class="clearfix"></div>
                         </li>
@@ -33,23 +33,32 @@
                                 <thead>
                                     <tr>
                                         <th>Property</th>
-                                        <th>Last Name</th>
-                                        <th>Age</th>
-                                        <th>Location</th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="listing in vm.visibleListings">
+                                    <tr ng-repeat="listing in vm.listings | limitTo:vm.pgItemsPerPage:(vm.pgCurrentPage - 1) * vm.pgItemsPerPage">
+                                        <td><img ng-src="{{listing.properties.thumbnail_url}}" style="width:60px; float: left; margin-right: 4px"></td>
                                         <td>{{listing.properties.name}}</td>
-                                        <td>{{p.lastName}}</td>
-                                        <td>{{p.age}}</td>
-                                        <td>{{p.location}}</td>
+                                        <td>{{listing.properties.price}}</td>
+
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="widget-foot">
-                            <div class="clearfix"></div>
+                            <div class="clearfix">
+                                <uib-pagination
+                                    class="pagination-admin"
+                                    total-items="vm.pgTotalItems"
+                                    ng-model="vm.pgCurrentPage"
+                                    max-size="vm.pgMaxSize"
+                                    items-per-page="vm.pgItemsPerPage"
+                                    ng-change="vm.createMarkers()">
+                                </uib-pagination>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -59,10 +68,9 @@
                              allow-collapse="true"></div>
                         <div class="widget-content text-center text-info">
                             <!--<small>{{vm.news.description}}</small>-->
-                            <ui-gmap-google-map center="vm.map.center" zoom="vm.map.zoom" options="vm.options"></ui-gmap-google-map>
-                            <!--<ui-gmap-google-map center="vm.map.center" zoom="vm.map.zoom" draggable="true" options="vm.options" bounds="vm.map.bounds">-->
-                                <!--<ui-gmap-markers models="vm.randomMarkers" coords="'self'" icon="'icon'">-->
-                                <!--</ui-gmap-markers>-->
+                            <ui-gmap-google-map center="vm.map.center" zoom="vm.map.zoom" options="vm.options">
+                                <ui-gmap-markers models="vm.markers" coords="'self'" icon="'icon'">
+                                </ui-gmap-markers>
                             </ui-gmap-google-map>
                         </div>
                         <div class="widget-foot">
